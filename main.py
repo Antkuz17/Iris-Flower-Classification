@@ -100,10 +100,10 @@ def backpropagation(X, Y, Z1, A1, Z2, A2, W1, W2):
 # Test backpropagation
 dW1, db1, dW2, db2 = backpropagation(X_train_normalized, y_train_encoded, Z1, A1, Z2, A2, W1, W2)
 
-print("dW1 shape:", dW1.shape)  # Should be (4, 5)
-print("db1 shape:", db1.shape)  # Should be (1, 5)
-print("dW2 shape:", dW2.shape)  # Should be (5, 3)
-print("db2 shape:", db2.shape)  # Should be (1, 3)
+print("dW1 shape:", dW1.shape)  
+print("db1 shape:", db1.shape)  
+print("dW2 shape:", dW2.shape) 
+print("db2 shape:", db2.shape) 
 
 
 # Training function
