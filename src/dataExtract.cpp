@@ -41,7 +41,21 @@ std::vector<std::vector<Record>> getCsvData () {
     listDataPoints[currentLine].sepal_width = normalize_sepal_width(std::stod(tokens[1]));  
     listDataPoints[currentLine].pedal_length = normalize_pedal_length(std::stod(tokens[2])); 
     listDataPoints[currentLine].pedal_width = normalize_pedal_width(std::stod(tokens[3]));  
-    listDataPoints[currentLine].flower_type = tokens[4];     
+    listDataPoints[currentLine].flower_type = tokens[4]; 
+    
+    if (listDataPoints[currentLine].flower_type == "Iris-setosa") {
+        listDataPoints[currentLine].one_hot[0] = 1.0;
+        listDataPoints[currentLine].one_hot[1] = 0.0;
+        listDataPoints[currentLine].one_hot[2] = 0.0;
+    } else if (listDataPoints[currentLine].flower_type == "Iris-versicolor") {
+        listDataPoints[currentLine].one_hot[0] = 0.0;
+        listDataPoints[currentLine].one_hot[1] = 1.0;
+        listDataPoints[currentLine].one_hot[2] = 0.0;
+    } else if (listDataPoints[currentLine].flower_type == "Iris-virginica") {
+        listDataPoints[currentLine].one_hot[0] = 0.0;
+        listDataPoints[currentLine].one_hot[1] = 0.0;
+        listDataPoints[currentLine].one_hot[2] = 1.0;
+    }
 
     currentLine++;
         
@@ -109,7 +123,3 @@ double normalize_sepal_width(double value){
 
 // g++ dataExtract.cpp -o testing ; ./testing
 
-
-int main(){
-    std::cout << "Testing data extraction" << std::endl;
-}

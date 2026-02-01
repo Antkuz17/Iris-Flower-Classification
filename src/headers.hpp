@@ -10,6 +10,7 @@ struct Record {
     double sepal_length;
     double sepal_width;
     std::string flower_type;
+    double one_hot[3];
 };
 
 std::vector<std::vector<Record>> getCsvData();
@@ -20,5 +21,8 @@ double normalize_pedal_length(double value);
 double normalize_pedal_width(double value);
 double normalize_sepal_length(double value);
 double normalize_sepal_width(double value);
+
+
+inline double sigmoid(double x);
 
 #endif
