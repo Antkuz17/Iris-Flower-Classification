@@ -9,12 +9,14 @@ inline double sigmoid(double x) {
 
 class NeuralNetwork {
     public:
+        NeuralNetwork(unsigned int inputNum, unsigned int outputNum, unsigned int HiddenLayerNum);
+        
+        
 
     private:
     
 
 }
-
 
 
 double mean_squared_error(const double* prediction, const double* actual, int size){

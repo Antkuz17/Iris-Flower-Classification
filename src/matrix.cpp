@@ -1,0 +1,56 @@
+// Matrix class implementation used for basic matrix operations within neural networks
+#include <vector>
+#include <random>
+
+class Matrix {
+    public:
+
+        Matrix(unsigned int rows, unsigned int col){
+            num_rows = rows;
+            num_col = col;
+
+            engine = engine(42);
+            dist = dist(0.0, 0.1);
+
+            arr2D = std::vector<std::vector<double>>(num_rows, std::vector<double>(num_col));
+            randomize_matrix();
+        }
+
+
+
+    private:
+
+        // The dimensions of the matrix
+        unsigned int num_rows;
+        unsigned int num_col;
+
+        // 2d array of doubles that represents the matrix
+        std::vector<std::vector<double>> arr2D{};
+
+        // Used for the random number generation, no point in creating a new engine every time
+        std::mt19937 engine;
+        std::uniform_real_distribution<double> dist;
+
+        // Geenerates a random number between 0 and 0.1, this is what fills the matrix at the beginning
+        double gen_rand(){
+            return dist(engine);
+        }   
+
+
+
+        // Take the matrix and fill it with default values before the training starts
+        void randomize_matrix(){
+            // outer loop iterate through col first
+            for(int i{}; i < num_row; i++){
+
+                // Saving the current vector we are using for iteration through the row
+                <std::vector<double> current_arr = arr2D[i];
+
+                // Iterate over each row and fill with random nums
+                for(int j{}; j < num_col; j++){
+                    current_arr[j] = gen_rand();
+                }
+            }
+        }
+}
+
