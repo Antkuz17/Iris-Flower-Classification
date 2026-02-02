@@ -1,6 +1,7 @@
 // Matrix class implementation used for basic matrix operations within neural networks
 #include <vector>
 #include <random>
+#include <stdexcept>
 
 class Matrix {
     public:
@@ -31,7 +32,27 @@ class Matrix {
             return arr2D[row][col];
         }
 
-        
+
+        // Matrix multiplication through operator overloading
+        Matrix operator*(const Matrix& other) const {
+            if(num_col != other.num_rows){
+                throw std::invalid_argument("Matrix dimensions do not match for multiplication");
+            }
+
+            // Initialize the result matrix with proper dimensions
+            Matrix result(num_rows, other.num_col);
+
+            for(unsigned int i = 0; i < num_rows; i++){
+                for(unsigned int j = 0; j < other.num_col; j++){
+                    result.arr2D[i][j] = 0.0;
+                    for(unsigned int k = 0; k < num_col; k++){
+                        result.arr2D[i][j] += arr2D[i][k] * other.arr2D[k][j];
+                    }
+                }
+            }
+            return result;
+        }
+
 
 
 
@@ -58,16 +79,13 @@ class Matrix {
         // Take the matrix and fill it with default values before the training starts
         void randomize_matrix(){
             // outer loop iterate through col first
-            for(int i{}; i < num_row; i++){
-
-                // Saving the current vector we are using for iteration through the row
-                <std::vector<double> current_arr = arr2D[i];
+            for(int i{}; i < num_rows; i++){
 
                 // Iterate over each row and fill with random nums
                 for(int j{}; j < num_col; j++){
-                    current_arr[j] = gen_rand();
+                    arr2D[i][j] = gen_rand();
                 }
             }
         }
-}
+};
 
