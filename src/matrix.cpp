@@ -16,6 +16,23 @@ class Matrix {
             randomize_matrix();
         }
 
+        // Function to get the number of rows
+        unsigned int get_num_rows() const {
+            return num_rows;
+        }
+
+        // Function to get the number of columns
+        unsigned int get_num_col() const {
+            return num_col;
+        }
+
+        // Function to get the value at a specific position
+        double get_val(unsigned int row, unsigned int col) const {
+            return arr2D[row][col];
+        }
+
+        
+
 
 
     private:
