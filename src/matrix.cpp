@@ -52,6 +52,14 @@ class Matrix {
             }
             return result;
         }
+        
+        Matrix transpose() const;
+        Matrix operator+(const Matrix& other) const;
+        Matrix operator-(const Matrix& other) const
+        Matrix elementwise_multiply(const Matrix& other) const;
+        Matrix operator*(double scalar) const;
+        Matrix apply_function(double (*func)(double)) const;
+
 
 
 

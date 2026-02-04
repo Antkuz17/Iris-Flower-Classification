@@ -15,6 +15,14 @@ public:
     
     Matrix operator*(const Matrix& other) const;
 
+
+    Matrix transpose() const;
+    Matrix operator+(const Matrix& other) const;
+    Matrix operator-(const Matrix& other) const
+    Matrix elementwise_multiply(const Matrix& other) const;
+    Matrix operator*(double scalar) const;
+    Matrix apply_function(double (*func)(double)) const;
+
 private:
     unsigned int num_rows;
     unsigned int num_col;
