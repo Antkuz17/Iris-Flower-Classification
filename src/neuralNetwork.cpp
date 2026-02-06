@@ -10,8 +10,13 @@ inline double sigmoid(double x) {
 class NeuralNetwork {
     public:
         NeuralNetwork(unsigned int inputNum, unsigned int outputNum, unsigned int HiddenLayerNum);
-        
-        
+
+        Matrix transpose() const;
+        Matrix operator+(const Matrix& other) const;
+        Matrix operator-(const Matrix& other) const
+        Matrix elementwise_multiply(const Matrix& other) const;
+        Matrix operator*(double scalar) const;
+        Matrix apply_function(double (*func)(double)) const;
 
     private:
     
