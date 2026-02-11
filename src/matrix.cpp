@@ -32,6 +32,11 @@ class Matrix {
             return arr2D[row][col];
         }
 
+        // Given a row and col, set that position to the provided value
+        void set_val(unsigned int row, unsigned int col, double value){
+            arr2D[row][col] = value; 
+        }
+
 
         // Matrix multiplication through operator overloading
         Matrix operator*(const Matrix& other) const {
@@ -52,13 +57,26 @@ class Matrix {
             }
             return result;
         }
+
+    // Transpose the matrix by swapping rows and columns and return the transposed matrix
+    Matrix transpose() const {
+        Matrix newMatrix(num_col, num_rows); 
         
-        Matrix transpose() const;
-        Matrix operator+(const Matrix& other) const;
-        Matrix operator-(const Matrix& other) const
-        Matrix elementwise_multiply(const Matrix& other) const;
-        Matrix operator*(double scalar) const;
-        Matrix apply_function(double (*func)(double)) const;
+        for (unsigned int i = 0; i < num_rows; i++) {
+            for (unsigned int j = 0; j < num_col; j++) {
+                newMatrix.set_val(j, i, arr2D[i][j]); 
+            }
+        }
+        
+        return newMatrix;
+    }
+
+
+    Matrix operator+(const Matrix& other) const;
+    Matrix operator-(const Matrix& other) const
+    Matrix elementwise_multiply(const Matrix& other) const;
+    Matrix operator*(double scalar) const;
+    Matrix apply_function(double (*func)(double)) const;
 
 
 
