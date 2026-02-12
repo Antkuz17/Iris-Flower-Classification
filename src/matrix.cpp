@@ -71,9 +71,47 @@ class Matrix {
         return newMatrix;
     }
 
+    // Returns the result of adding up two matrices
+    Matrix operator+(const Matrix& other) const
+    {
+        // Matrix addition only applies if the dimensions of the two matrices are the same, if not throw an error
+        if(num_rows != other.num_rows || num_col != other.num_col){
+            throw std::invalid_argument("Matrix dimensions do not match for addition");
+        }
+        
+        // Initialize the result matrix with proper dimensions
+        Matrix result(num_rows, num_col);
 
-    Matrix operator+(const Matrix& other) const;
+        // Main loop where each of the elements from each matrix are added together and stored in the result matrix
+        for(unsigned int i{}; i < num_rows; i++){
+            for(unsigned int j{}; j < num_col; j++){
+                result.arr2D[i][j] = arr2D[i][j] + other.arr2D[i][j];
+            }
+        }
+
+        return result;
+    }
+
     Matrix operator-(const Matrix& other) const
+    {
+        // Matrix subtraction only applies if the dimensions of the two matrices are the same, if not throw an error
+        if(num_rows != other.num_rows || num_col != other.num_col){
+            throw std::invalid_argument("Matrix dimensions do not match for subtraction");
+        }
+        
+        // Initialize the result matrix with proper dimensions
+        Matrix result(num_rows, num_col);
+
+        // Main loop where each of the elements from each matrix are subtracted and stored in the result matrix
+        for(unsigned int i{}; i < num_rows; i++){
+            for(unsigned int j{}; j < num_col; j++){
+                result.arr2D[i][j] = arr2D[i][j] - other.arr2D[i][j];
+            }
+        }
+
+        return result;
+    }
+    
     Matrix elementwise_multiply(const Matrix& other) const;
     Matrix operator*(double scalar) const;
     Matrix apply_function(double (*func)(double)) const;
