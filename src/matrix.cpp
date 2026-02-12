@@ -111,9 +111,39 @@ class Matrix {
 
         return result;
     }
-    
-    Matrix elementwise_multiply(const Matrix& other) const;
-    Matrix operator*(double scalar) const;
+
+    // Each entry (i, j) of matrix one is multipied by the equivalent entry in matrix 
+    Matrix elementwise_multiply(const Matrix& other) const
+    {
+        if(num_rows != other.num_rows || num_col != other.num_col){
+            throw std::invalid_argument("Matrix dimesions do not match for multiplication");
+        }
+
+        Matrix result(num_rows, num_col);
+
+        for(unsigned int i{}; i < num_rows; i++){
+            for (unsigned int j{}; j < num_col; j++){
+                result.arr2D[i][j] = arr2D[i][j] * other.arr2D[i][j];
+            }
+        }
+
+        return result;
+    }
+
+    // Multiply each entry in the matrix by the same scalar value
+    Matrix operator*(double scalar) const
+    {
+        Matrix result(num_rows, num_col);
+
+        for(unsigned int i{}; i < num_rows; i++){
+            for(unsigned int j; j < num_col; j++){
+                result.arr2D[i][j] = arr2D[i][j] * scalar;
+            }
+        }
+
+        return result;
+    }
+
     Matrix apply_function(double (*func)(double)) const;
 
 
