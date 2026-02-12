@@ -6,13 +6,9 @@
 class Matrix {
     public:
 
-        Matrix(unsigned int rows, unsigned int col){
-            num_rows = rows;
-            num_col = col;
-
-            engine = engine(42);
-            dist = dist(0.0, 0.1);
-
+        Matrix(unsigned int rows, unsigned int col)
+            : num_rows(rows), num_col(col), engine(42), dist(0.0, 0.1) {
+            
             arr2D = std::vector<std::vector<double>>(num_rows, std::vector<double>(num_col));
             randomize_matrix();
         }
@@ -136,7 +132,7 @@ class Matrix {
         Matrix result(num_rows, num_col);
 
         for(unsigned int i{}; i < num_rows; i++){
-            for(unsigned int j; j < num_col; j++){
+            for(unsigned int j{}; j < num_col; j++){
                 result.arr2D[i][j] = arr2D[i][j] * scalar;
             }
         }

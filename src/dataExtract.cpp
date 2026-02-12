@@ -94,7 +94,7 @@ std::vector<std::vector<Record>> splitData(int trainNum, int testNum, Record* da
     return array;
 }   
 
-
+// Shuffles the data points in the array since be default the Iris data is structured in an ordered way
 void shuffleVector(Record * dataPoints, int size) {
 
     // 42 for the memes and the funnies 
