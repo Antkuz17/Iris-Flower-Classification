@@ -144,10 +144,21 @@ class Matrix {
         return result;
     }
 
-    Matrix apply_function(double (*func)(double)) const;
+    // Apply a function to each entry in the matrix and return the resulting matrix
+    Matrix apply_function(double (*func)(double)) const{
+        
+        // Initialize the result matrix with proper dimensions
+        Matrix result(num_rows, num_col);
 
+        // Main loop where each of the elements from the matrix have the function applied to them and stored in the result matrix   
+        for(unsigned int i{}; i < num_rows; i++){
+            for(unsigned int j{}; j < num_col; j++){
+                result.arr2D[i][j] = func(arr2D[i][j]);
+            }
+        }
 
-
+        return result;
+    }
 
 
     private:
@@ -167,7 +178,6 @@ class Matrix {
         double gen_rand(){
             return dist(engine);
         }   
-
 
 
         // Take the matrix and fill it with default values before the training starts
