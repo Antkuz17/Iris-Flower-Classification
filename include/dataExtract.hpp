@@ -22,9 +22,4 @@ double normalize_pedal_width(double value);
 double normalize_sepal_length(double value);
 double normalize_sepal_width(double value);
 
-
-inline double sigmoid(double x);
-
-double mean_squared_error(const double* prediction, const double* actual, int size);
-
 #endif

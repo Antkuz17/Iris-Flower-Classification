@@ -121,5 +121,4 @@ double normalize_sepal_width(double value){
     return ((value - 2.0) / 2.4);
 }
 
-// g++ dataExtract.cpp -o testing ; ./testing
 
