@@ -5,7 +5,6 @@
 #include "matrix.hpp"
 #include "dataExtract.hpp"
 
-
 struct GradientStruct {
     Matrix dW1;
     Matrix dW2;

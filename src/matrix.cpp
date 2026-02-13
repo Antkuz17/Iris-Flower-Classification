@@ -1,191 +1,176 @@
 // Matrix class implementation used for basic matrix operations within neural networks
-#include <vector>
-#include <random>
-#include <stdexcept>
 
-class Matrix {
-    public:
-
-        Matrix(unsigned int rows, unsigned int col)
-            : num_rows(rows), num_col(col), engine(42), dist(0.0, 0.1) {
-            
-            arr2D = std::vector<std::vector<double>>(num_rows, std::vector<double>(num_col));
-            randomize_matrix();
-        }
-
-        // Function to get the number of rows
-        unsigned int get_num_rows() const {
-            return num_rows;
-        }
-
-        // Function to get the number of columns
-        unsigned int get_num_col() const {
-            return num_col;
-        }
-
-        // Function to get the value at a specific position
-        double get_val(unsigned int row, unsigned int col) const {
-            return arr2D[row][col];
-        }
-
-        // Given a row and col, set that position to the provided value
-        void set_val(unsigned int row, unsigned int col, double value){
-            arr2D[row][col] = value; 
-        }
+#include "matrix.hpp"
 
 
-        // Matrix multiplication through operator overloading
-        Matrix operator*(const Matrix& other) const {
-            if(num_col != other.num_rows){
-                throw std::invalid_argument("Matrix dimensions do not match for multiplication");
-            }
+Matrix::Matrix(unsigned int rows, unsigned int col)
+    : num_rows(rows), num_col(col), engine(42), dist(0.0, 0.1) {
+    
+    arr2D = std::vector<std::vector<double>>(num_rows, std::vector<double>(num_col));
+    randomize_matrix();
+}
 
-            // Initialize the result matrix with proper dimensions
-            Matrix result(num_rows, other.num_col);
+// Function to get the number of rows
+unsigned int Matrix::get_num_rows() const {
+    return num_rows;
+}
 
-            for(unsigned int i = 0; i < num_rows; i++){
-                for(unsigned int j = 0; j < other.num_col; j++){
-                    result.arr2D[i][j] = 0.0;
-                    for(unsigned int k = 0; k < num_col; k++){
-                        result.arr2D[i][j] += arr2D[i][k] * other.arr2D[k][j];
-                    }
-                }
-            }
-            return result;
-        }
+// Function to get the number of columns
+unsigned int Matrix::get_num_col() const {
+    return num_col;
+}
 
-    // Transpose the matrix by swapping rows and columns and return the transposed matrix
-    Matrix transpose() const {
-        Matrix newMatrix(num_col, num_rows); 
-        
-        for (unsigned int i = 0; i < num_rows; i++) {
-            for (unsigned int j = 0; j < num_col; j++) {
-                newMatrix.set_val(j, i, arr2D[i][j]); 
-            }
-        }
-        
-        return newMatrix;
+// Function to get the value at a specific position
+double Matrix::get_val(unsigned int row, unsigned int col) const {
+    return arr2D[row][col];
+}
+
+// Given a row and col, set that position to the provided value
+void Matrix::set_val(unsigned int row, unsigned int col, double value){
+    arr2D[row][col] = value; 
+}
+
+
+// Matrix multiplication through operator overloading
+Matrix Matrix::operator*(const Matrix& other) const {
+    if(num_col != other.num_rows){
+        throw std::invalid_argument("Matrix dimensions do not match for multiplication");
     }
 
-    // Returns the result of adding up two matrices
-    Matrix operator+(const Matrix& other) const
-    {
-        // Matrix addition only applies if the dimensions of the two matrices are the same, if not throw an error
-        if(num_rows != other.num_rows || num_col != other.num_col){
-            throw std::invalid_argument("Matrix dimensions do not match for addition");
-        }
-        
-        // Initialize the result matrix with proper dimensions
-        Matrix result(num_rows, num_col);
+    // Initialize the result matrix with proper dimensions
+    Matrix result(num_rows, other.num_col);
 
-        // Main loop where each of the elements from each matrix are added together and stored in the result matrix
-        for(unsigned int i{}; i < num_rows; i++){
-            for(unsigned int j{}; j < num_col; j++){
-                result.arr2D[i][j] = arr2D[i][j] + other.arr2D[i][j];
+    for(unsigned int i = 0; i < num_rows; i++){
+        for(unsigned int j = 0; j < other.num_col; j++){
+            result.arr2D[i][j] = 0.0;
+            for(unsigned int k = 0; k < num_col; k++){
+                result.arr2D[i][j] += arr2D[i][k] * other.arr2D[k][j];
             }
         }
-
-        return result;
     }
+    return result;
+}
 
-    Matrix operator-(const Matrix& other) const
-    {
-        // Matrix subtraction only applies if the dimensions of the two matrices are the same, if not throw an error
-        if(num_rows != other.num_rows || num_col != other.num_col){
-            throw std::invalid_argument("Matrix dimensions do not match for subtraction");
-        }
-        
-        // Initialize the result matrix with proper dimensions
-        Matrix result(num_rows, num_col);
+// Transpose the matrix by swapping rows and columns and return the transposed matrix
+Matrix Matrix::transpose() const {
+Matrix newMatrix(num_col, num_rows); 
 
-        // Main loop where each of the elements from each matrix are subtracted and stored in the result matrix
-        for(unsigned int i{}; i < num_rows; i++){
-            for(unsigned int j{}; j < num_col; j++){
-                result.arr2D[i][j] = arr2D[i][j] - other.arr2D[i][j];
-            }
-        }
-
-        return result;
+for (unsigned int i = 0; i < num_rows; i++) {
+    for (unsigned int j = 0; j < num_col; j++) {
+        newMatrix.set_val(j, i, arr2D[i][j]); 
     }
+}
 
-    // Each entry (i, j) of matrix one is multipied by the equivalent entry in matrix 
-    Matrix elementwise_multiply(const Matrix& other) const
-    {
-        if(num_rows != other.num_rows || num_col != other.num_col){
-            throw std::invalid_argument("Matrix dimesions do not match for multiplication");
-        }
+return newMatrix;
+}
 
-        Matrix result(num_rows, num_col);
+// Returns the result of adding up two matrices
+Matrix Matrix::operator+(const Matrix& other) const
+{
+// Matrix addition only applies if the dimensions of the two matrices are the same, if not throw an error
+if(num_rows != other.num_rows || num_col != other.num_col){
+    throw std::invalid_argument("Matrix dimensions do not match for addition");
+}
 
-        for(unsigned int i{}; i < num_rows; i++){
-            for (unsigned int j{}; j < num_col; j++){
-                result.arr2D[i][j] = arr2D[i][j] * other.arr2D[i][j];
-            }
-        }
+// Initialize the result matrix with proper dimensions
+Matrix result(num_rows, num_col);
 
-        return result;
+// Main loop where each of the elements from each matrix are added together and stored in the result matrix
+for(unsigned int i{}; i < num_rows; i++){
+    for(unsigned int j{}; j < num_col; j++){
+        result.arr2D[i][j] = arr2D[i][j] + other.arr2D[i][j];
     }
+}
 
-    // Multiply each entry in the matrix by the same scalar value
-    Matrix operator*(double scalar) const
-    {
-        Matrix result(num_rows, num_col);
+return result;
+}
 
-        for(unsigned int i{}; i < num_rows; i++){
-            for(unsigned int j{}; j < num_col; j++){
-                result.arr2D[i][j] = arr2D[i][j] * scalar;
-            }
-        }
+Matrix Matrix::operator-(const Matrix& other) const
+{
+// Matrix subtraction only applies if the dimensions of the two matrices are the same, if not throw an error
+if(num_rows != other.num_rows || num_col != other.num_col){
+    throw std::invalid_argument("Matrix dimensions do not match for subtraction");
+}
 
-        return result;
+// Initialize the result matrix with proper dimensions
+Matrix result(num_rows, num_col);
+
+// Main loop where each of the elements from each matrix are subtracted and stored in the result matrix
+for(unsigned int i{}; i < num_rows; i++){
+    for(unsigned int j{}; j < num_col; j++){
+        result.arr2D[i][j] = arr2D[i][j] - other.arr2D[i][j];
     }
+}
 
-    // Apply a function to each entry in the matrix and return the resulting matrix
-    Matrix apply_function(double (*func)(double)) const{
-        
-        // Initialize the result matrix with proper dimensions
-        Matrix result(num_rows, num_col);
+return result;
+}
 
-        // Main loop where each of the elements from the matrix have the function applied to them and stored in the result matrix   
-        for(unsigned int i{}; i < num_rows; i++){
-            for(unsigned int j{}; j < num_col; j++){
-                result.arr2D[i][j] = func(arr2D[i][j]);
-            }
-        }
+// Each entry (i, j) of matrix one is multipied by the equivalent entry in matrix 
+Matrix Matrix::elementwise_multiply(const Matrix& other) const
+{
+if(num_rows != other.num_rows || num_col != other.num_col){
+    throw std::invalid_argument("Matrix dimesions do not match for multiplication");
+}
 
-        return result;
+Matrix result(num_rows, num_col);
+
+for(unsigned int i{}; i < num_rows; i++){
+    for (unsigned int j{}; j < num_col; j++){
+        result.arr2D[i][j] = arr2D[i][j] * other.arr2D[i][j];
     }
+}
+
+return result;
+}
+
+// Multiply each entry in the matrix by the same scalar value
+Matrix Matrix::operator*(double scalar) const
+{
+Matrix result(num_rows, num_col);
+
+for(unsigned int i{}; i < num_rows; i++){
+    for(unsigned int j{}; j < num_col; j++){
+        result.arr2D[i][j] = arr2D[i][j] * scalar;
+    }
+}
+
+return result;
+}
+
+// Apply a function to each entry in the matrix and return the resulting matrix
+Matrix Matrix::apply_function(double (*func)(double)) const{
+
+// Initialize the result matrix with proper dimensions
+Matrix result(num_rows, num_col);
+
+// Main loop where each of the elements from the matrix have the function applied to them and stored in the result matrix   
+for(unsigned int i{}; i < num_rows; i++){
+    for(unsigned int j{}; j < num_col; j++){
+        result.arr2D[i][j] = func(arr2D[i][j]);
+    }
+}
+
+return result;
+}
+
+// Geenerates a random number between 0 and 0.1, this is what fills the matrix at the beginning
+double Matrix::gen_rand(){
+    return dist(engine);
+}   
 
 
-    private:
+// Take the matrix and fill it with default values before the training starts
+void Matrix::randomize_matrix(){
+    // outer loop iterate through col first
+    for(unsigned int i{}; i < num_rows; i++){
 
-        // The dimensions of the matrix
-        unsigned int num_rows;
-        unsigned int num_col;
-
-        // 2d array of doubles that represents the matrix
-        std::vector<std::vector<double>> arr2D{};
-
-        // Used for the random number generation, no point in creating a new engine every time
-        std::mt19937 engine;
-        std::uniform_real_distribution<double> dist;
-
-        // Geenerates a random number between 0 and 0.1, this is what fills the matrix at the beginning
-        double gen_rand(){
-            return dist(engine);
-        }   
-
-
-        // Take the matrix and fill it with default values before the training starts
-        void randomize_matrix(){
-            // outer loop iterate through col first
-            for(int i{}; i < num_rows; i++){
-
-                // Iterate over each row and fill with random nums
-                for(int j{}; j < num_col; j++){
-                    arr2D[i][j] = gen_rand();
-                }
-            }
+        // Iterate over each row and fill with random nums
+        for(unsigned int j{}; j < num_col; j++){
+            arr2D[i][j] = gen_rand();
         }
-};
+    }
+}
+
+
+
 
