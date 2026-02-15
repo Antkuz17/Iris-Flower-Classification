@@ -48,6 +48,12 @@ class NeuralNetwork {
         Matrix b1;
         Matrix b2;
 
+        // Caches for the forward pass values, these are used in the back propagation step to calculate the gradients
+        Matrix z1_cache;
+        Matrix a1_cache;
+        Matrix z2_cache;
+        Matrix input_cache;
+
 };
 
 inline double sigmoid(double x);

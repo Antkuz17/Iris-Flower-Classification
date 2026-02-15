@@ -34,7 +34,20 @@ double NeuralNetwork::mean_squared_error(const double* prediction, const double*
 }
 
 // Forward propagation function that takes in an input vector and returns the output of the network as a vector of doubles
-Matrix NeuralNetwork::forward_propagation(const Matrix& input);
+Matrix NeuralNetwork::forward_propagation(const Matrix& input){
+    // Save input for backprop
+    input_cache = input;
+    
+    // Calculate hidden layer
+    z1_cache = (input * W1) + b1;
+    a1_cache = z1_cache.apply_function(sigmoid);
+
+    // Calculate output layer
+    z2_cache = (a1_cache * W2) + b2;
+    Matrix a2 = z2_cache.apply_function(sigmoid);
+
+    return a2;
+}
 
 // Back propagation function that will return a struct containing the gradients of the weights and biases of the network based on the input, expected output, and actual output
 GradientStruct NeuralNetwork::back_propagation(const Matrix& input, const Matrix& expected_output);
