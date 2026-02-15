@@ -1,5 +1,6 @@
 #include <cmath>
 #include "neuralNetwork.hpp"
+#include "matrix.hpp"
 
 // Sigmoid activation function that takes in a double and returns the sigmoid of that double`
 inline double sigmoid(double x) {
@@ -7,7 +8,19 @@ inline double sigmoid(double x) {
 }
 
 // Constructor for the neural network, initializes the weights and biases of the network
-NeuralNetwork::NeuralNetwork(unsigned int inputNum, unsigned int outputNum, unsigned int HiddenLayerNum);
+NeuralNetwork::NeuralNetwork(unsigned int input_size, unsigned int hidden_size, unsigned int output_size){
+
+    // Initializing the meta data for the object like the all the sizes of the intermediary layers
+    inputNum = input_size;
+    outputNum = output_size;
+    hiddenLayerNum = hidden_size;
+        
+    /// Initializing the weights and biases of the network, these are randomly generated between 0 and 0.1
+    W1 = Matrix(input_size, hidden_size);
+    W2 = Matrix(hidden_size, output_size);
+    b1 = Matrix(1, hidden_size);
+    b2 = Matrix(1, output_size);
+}
 
 
 // The loss/cost function that compares the output to the expected
