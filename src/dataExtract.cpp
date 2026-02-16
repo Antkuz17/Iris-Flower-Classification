@@ -10,7 +10,7 @@
 
 
 std::vector<std::vector<Record>> getCsvData () {
-    std::ifstream file("../data/iris.data");
+    std::ifstream file("data/iris.data");
 
     // An array of all the the data point objects
     Record * listDataPoints = new Record[150];
@@ -23,9 +23,7 @@ std::vector<std::vector<Record>> getCsvData () {
     // Until we hit the end of the file, access each line and populate the struct
     while(std::getline(file, line)){
         
-        // Debugging line
-        std::cout << line << std::endl;
-
+    
         std::stringstream ss(line);
 
         std::string token;
