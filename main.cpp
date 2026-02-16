@@ -6,3 +6,8 @@ int main() {
     run_visualization();
     return 0;
 }
+
+/* Run command in root directory of project
+cmake --build build
+.\build\Iris.exe
+*/
