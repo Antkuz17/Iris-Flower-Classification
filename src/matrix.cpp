@@ -10,6 +10,14 @@ Matrix::Matrix(unsigned int rows, unsigned int col)
     randomize_matrix();
 }
 
+Matrix::Matrix(){
+    num_rows = 0;
+    num_col = 0;
+    engine = std::mt19937(42);
+    dist = std::uniform_real_distribution<double>(0.0, 0.1);
+    arr2D = std::vector<std::vector<double>>(num_rows, std::vector<double>(num_col));
+}
+
 // Function to get the number of rows
 unsigned int Matrix::get_num_rows() const {
     return num_rows;

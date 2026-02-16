@@ -18,6 +18,9 @@ class NeuralNetwork {
         // Constructor for the neural network
         NeuralNetwork(unsigned int inputNum, unsigned int outputNum, unsigned int HiddenLayerNum);
 
+        // Default constructor for the neural network, initializes the network with 4 input nodes, 5 hidden layer nodes, and 3 output nodes
+        NeuralNetwork();
+
         // Forward propagation function that takes in an input vector and returns the output of the network as a vector of doubles
         Matrix forward_propagation(const Matrix& input);
 

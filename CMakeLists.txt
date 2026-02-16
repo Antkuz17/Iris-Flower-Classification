@@ -3,5 +3,13 @@ project(IrisClassification)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# This creates 'IrisClassifier.exe' from your main.cpp
-add_executable(IrisClassifier main.cpp)
+include_directories(include)
+
+add_executable(Iris 
+    main.cpp 
+    src/dataExtract.cpp 
+    src/matrix.cpp 
+    src/neuralNetwork.cpp
+)
+
+set_target_properties(Iris PROPERTIES LINK_FLAGS "/SUBSYSTEM:CONSOLE")

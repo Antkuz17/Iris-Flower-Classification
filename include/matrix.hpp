@@ -8,10 +8,13 @@
 class Matrix {
 public:
     Matrix(unsigned int rows, unsigned int col);
+
+    Matrix();
     
     unsigned int get_num_rows() const;
     unsigned int get_num_col() const;
     double get_val(unsigned int row, unsigned int col) const;
+    void set_val(unsigned int row, unsigned int col, double value);
     
     Matrix operator*(const Matrix& other) const;
 

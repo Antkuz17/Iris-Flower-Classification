@@ -22,10 +22,23 @@ NeuralNetwork::NeuralNetwork(unsigned int input_size, unsigned int hidden_size, 
     b2 = Matrix(1, output_size);
 }
 
+NeuralNetwork::NeuralNetwork(){
+    // Default constructor, initializes the network with 4 input nodes, 5 hidden layer nodes, and 3 output nodes
+    inputNum = 4;
+    outputNum = 3;
+    hiddenLayerNum = 5;
+        
+    /// Initializing the weights and biases of the network, these are randomly generated between 0 and 0.1
+    W1 = Matrix(inputNum, hiddenLayerNum);
+    W2 = Matrix(hiddenLayerNum, outputNum);
+    b1 = Matrix(1, hiddenLayerNum);
+    b2 = Matrix(1, outputNum);
+}
+
 
 // The loss/cost function that compares the output to the expected
 // In summary, this tells you how bad the network is performance wise
-double NeuralNetwork::mean_squared_error(const double* prediction, const double* actual, int size){
+double mean_squared_error(const double* prediction, const double* actual, int size){
     double error = 0.0;
     for(int i = 0; i < size; i++){
         error += std::pow(prediction[i] - actual[i], 2);
@@ -49,14 +62,22 @@ Matrix NeuralNetwork::forward_propagation(const Matrix& input){
     return a2;
 }
 
-// Back propagation function that will return a struct containing the gradients of the weights and biases of the network based on the input, expected output, and actual output
-GradientStruct NeuralNetwork::back_propagation(const Matrix& input, const Matrix& expected_output);
+// // Back propagation function that will return a struct containing the gradients of the weights and biases of the network based on the input, expected output, and actual output
+// GradientStruct NeuralNetwork::back_propagation(const Matrix& input, const Matrix& expected_output){
+//     // TODO: Logic
+// }
 
-// Train the neural network on a given dataset for a specified number of epochs and learning rate
-void NeuralNetwork::train(const std::vector<std::vector<Record>>& training_data, int epochs, double learning_rate);
+// // Train the neural network on a given dataset for a specified number of epochs and learning rate
+// void NeuralNetwork::train(const std::vector<std::vector<Record>>& training_data, int epochs, double learning_rate){
+//     // TODO: Logic
+// }
 
-// Test the neural network on a given dataset and print the accuracy of the network
-void NeuralNetwork::test(const std::vector<std::vector<Record>>& testing_data);
+// // Test the neural network on a given dataset and print the accuracy of the network
+// void NeuralNetwork::test(const std::vector<std::vector<Record>>& testing_data){
+//     // TODO: Logic
+// }
 
-// Update the weights and biases of the network based on the calculated gradients and the learning rate
-void NeuralNetwork::update_weights(const GradientStruct& gradients, double learning_rate);
+// // Update the weights and biases of the network based on the calculated gradients and the learning rate
+// void NeuralNetwork::update_weights(const GradientStruct& gradients, double learning_rate){
+//     // TODO: Logic
+// }
