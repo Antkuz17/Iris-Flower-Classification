@@ -1,9 +1,8 @@
 // Gonna recode the entire network in c++ 
 // Why? cause i love to suffer and feel pain
-#include <iostream>
+#include "visualizer.hpp"
 
 int main() {
-    std::cout << "Hopefully this works" << std::endl;
+    run_visualization();
     return 0;
 }
-
