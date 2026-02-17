@@ -64,29 +64,34 @@ Matrix NeuralNetwork::forward_propagation(const Matrix& input){
 }
 
 GradientStruct NeuralNetwork::back_propagation(const Matrix& input, const Matrix& expected_output){
-    // Forward propagation to get intermediate values
-    Matrix A2 = forward_propagation(input);
+    Matrix A2 = z2_cache.apply_function(sigmoid);
     
-    // Output layer error
+    std::cout << "A2: " << A2.get_num_rows() << "x" << A2.get_num_col() << std::endl;
+    std::cout << "expected: " << expected_output.get_num_rows() << "x" << expected_output.get_num_col() << std::endl;
+    
     Matrix dZ2 = A2 - expected_output;
+    std::cout << "dZ2 done" << std::endl;
     
-    // Gradients for W2 and b2
     Matrix dW2 = a1_cache.transpose() * dZ2;
+    std::cout << "dW2 done" << std::endl;
+    
     Matrix db2 = dZ2;
+    std::cout << "db2 done" << std::endl;
 
-    // sigmoid derivative = A1 * (1 - A1)
-    Matrix ones(a1_cache.get_num_rows(), a1_cache.get_num_col());
-    // Fill ones matrix with 1.0
-    for(unsigned int i = 0; i < ones.get_num_rows(); i++){
-        for(unsigned int j = 0; j < ones.get_num_col(); j++){
-            ones.set_val(i, j, 1.0);
-        }
-    }
+    Matrix ones(a1_cache.get_num_rows(), a1_cache.get_num_col(), 1.0);
+    std::cout << "ones done" << std::endl;
+
     Matrix sigmoid_deriv = a1_cache.elementwise_multiply(ones - a1_cache);
+    std::cout << "sigmoid_deriv done" << std::endl;
+
     Matrix dZ1 = (dZ2 * W2.transpose()).elementwise_multiply(sigmoid_deriv);
+    std::cout << "dZ1 done" << std::endl;
     
     Matrix dW1 = input.transpose() * dZ1;
+    std::cout << "dW1 done" << std::endl;
+
     Matrix db1 = dZ1;
+    std::cout << "db1 done" << std::endl;
     
     return GradientStruct{dW1, db1, dW2, db2};
 }
@@ -97,7 +102,7 @@ void NeuralNetwork::train(const std::vector<std::vector<Record>>& training_data,
     for(int epoch = 0; epoch < epochs; epoch++){
         double total_cost = 0.0;
 
-        for(int i = 0; i < records.size(); i++){
+        for(unsigned int i = 0; i < records.size(); i++){
             // Build input matrix for one sample
             Matrix X(1, inputNum, 0.0);
             X.set_val(0, 0, records[i].sepal_length);
@@ -133,7 +138,7 @@ void NeuralNetwork::test(const std::vector<std::vector<Record>>& testing_data){
     std::vector<Record> records = testing_data[1];
     int correct = 0;
 
-    for(int i = 0; i < records.size(); i++){
+    for(unsigned int i = 0; i < records.size(); i++){
         // Build input matrix for one sample
         Matrix X(1, inputNum, 0.0);
         X.set_val(0, 0, records[i].sepal_length);
