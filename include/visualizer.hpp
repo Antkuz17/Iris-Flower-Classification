@@ -1,6 +1,6 @@
-#ifndef VISUALIZER_HPP
-#define VISUALIZER_HPP
+#pragma once
+#include <vector>
+#include "neuralNetwork.hpp"
+#include "dataExtract.hpp"
 
-void run_visualization();
-
-#endif
+void run_visualization(NeuralNetwork& nn, const std::vector<std::vector<Record>>& data);

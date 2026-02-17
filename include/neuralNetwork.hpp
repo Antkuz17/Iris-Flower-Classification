@@ -36,6 +36,10 @@ class NeuralNetwork {
         // Update the weights and biases of the network based on the calculated gradients and the learning rate
         void update_weights(const GradientStruct& gradients, double learning_rate);
 
+        Matrix getW1() const { return W1; }
+        Matrix getW2() const { return W2; }
+        Matrix getA1() const { return a1_cache; }
+
     private:
 
         // The number of input, output, and hidden layer nodes
@@ -60,6 +64,6 @@ class NeuralNetwork {
 };
 
 inline double sigmoid(double x);
-double mean_squared_error(const double* prediction, const double* actual, int size);
+double mean_squared_error(const Matrix& prediction, const Matrix& actual);
 
 #endif
