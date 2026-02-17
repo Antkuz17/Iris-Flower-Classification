@@ -66,34 +66,23 @@ Matrix NeuralNetwork::forward_propagation(const Matrix& input){
 GradientStruct NeuralNetwork::back_propagation(const Matrix& input, const Matrix& expected_output){
     Matrix A2 = z2_cache.apply_function(sigmoid);
     
-    std::cout << "A2: " << A2.get_num_rows() << "x" << A2.get_num_col() << std::endl;
-    std::cout << "expected: " << expected_output.get_num_rows() << "x" << expected_output.get_num_col() << std::endl;
-    
     Matrix dZ2 = A2 - expected_output;
-    std::cout << "dZ2 done" << std::endl;
     
     Matrix dW2 = a1_cache.transpose() * dZ2;
-    std::cout << "dW2 done" << std::endl;
     
     Matrix db2 = dZ2;
-    std::cout << "db2 done" << std::endl;
 
     Matrix ones(a1_cache.get_num_rows(), a1_cache.get_num_col(), 1.0);
-    std::cout << "ones done" << std::endl;
 
     Matrix sigmoid_deriv = a1_cache.elementwise_multiply(ones - a1_cache);
-    std::cout << "sigmoid_deriv done" << std::endl;
 
     Matrix dZ1 = (dZ2 * W2.transpose()).elementwise_multiply(sigmoid_deriv);
-    std::cout << "dZ1 done" << std::endl;
     
     Matrix dW1 = input.transpose() * dZ1;
-    std::cout << "dW1 done" << std::endl;
 
     Matrix db1 = dZ1;
-    std::cout << "db1 done" << std::endl;
     
-    return GradientStruct{dW1, db1, dW2, db2};
+    return GradientStruct{dW1, dW2, db1, db2};
 }
 
 void NeuralNetwork::train(const std::vector<std::vector<Record>>& training_data, int epochs, double learning_rate){
@@ -181,8 +170,12 @@ void NeuralNetwork::test(const std::vector<std::vector<Record>>& testing_data){
 
 // Update the weights and biases of the network based on the calculated gradients and the learning rate
 void NeuralNetwork::update_weights(const GradientStruct& gradients, double learning_rate){
+    
     W1 = W1 - gradients.dW1 * learning_rate;
     b1 = b1 - gradients.db1 * learning_rate;
-    W2 = W2 - gradients.dW2 * learning_rate;
+    
+    W2 = W2 - gradients.dW2 * learning_rate;    
+    
     b2 = b2 - gradients.db2 * learning_rate;
+
 }
