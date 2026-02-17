@@ -10,6 +10,11 @@ public:
     Matrix(unsigned int rows, unsigned int col);
 
     Matrix();
+
+    Matrix(unsigned int rows, unsigned int col, double fill_value)
+    : num_rows(rows), num_col(col), engine(42), dist(0.0, 0.1) {
+    arr2D = std::vector<std::vector<double>>(rows, std::vector<double>(col, fill_value));
+}
     
     unsigned int get_num_rows() const;
     unsigned int get_num_col() const;

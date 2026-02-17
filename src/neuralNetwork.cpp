@@ -1,6 +1,7 @@
 #include <cmath>
 #include "neuralNetwork.hpp"
 #include "matrix.hpp"
+#include <iostream>
 
 // Sigmoid activation function that takes in a double and returns the sigmoid of that double`
 inline double sigmoid(double x) {
@@ -38,12 +39,12 @@ NeuralNetwork::NeuralNetwork(){
 
 // The loss/cost function that compares the output to the expected
 // In summary, this tells you how bad the network is performance wise
-double mean_squared_error(const double* prediction, const double* actual, int size){
+double mean_squared_error(const Matrix& prediction, const Matrix& actual){
     double error = 0.0;
-    for(int i = 0; i < size; i++){
-        error += std::pow(prediction[i] - actual[i], 2);
+    for(unsigned int j = 0; j < prediction.get_num_col(); j++){
+        error += std::pow(prediction.get_val(0, j) - actual.get_val(0, j), 2);
     }
-    return error / size;  // Or / 2.0, depending on your derivative convention
+    return error / 2.0;
 }
 
 // Forward propagation function that takes in an input vector and returns the output of the network as a vector of doubles
@@ -89,15 +90,89 @@ GradientStruct NeuralNetwork::back_propagation(const Matrix& input, const Matrix
     
     return GradientStruct{dW1, db1, dW2, db2};
 }
-// // Train the neural network on a given dataset for a specified number of epochs and learning rate
-// void NeuralNetwork::train(const std::vector<std::vector<Record>>& training_data, int epochs, double learning_rate){
-//     // TODO: Logic
-// }
 
-// // Test the neural network on a given dataset and print the accuracy of the network
-// void NeuralNetwork::test(const std::vector<std::vector<Record>>& testing_data){
-//     // TODO: Logic
-// }
+void NeuralNetwork::train(const std::vector<std::vector<Record>>& training_data, int epochs, double learning_rate){
+    std::vector<Record> records = training_data[0];
+
+    for(int epoch = 0; epoch < epochs; epoch++){
+        double total_cost = 0.0;
+
+        for(int i = 0; i < records.size(); i++){
+            // Build input matrix for one sample
+            Matrix X(1, inputNum, 0.0);
+            X.set_val(0, 0, records[i].sepal_length);
+            X.set_val(0, 1, records[i].sepal_width);
+            X.set_val(0, 2, records[i].pedal_length);
+            X.set_val(0, 3, records[i].pedal_width);
+
+            // Build label matrix for one sample
+            Matrix Y(1, outputNum, 0.0);
+            Y.set_val(0, 0, records[i].one_hot[0]);
+            Y.set_val(0, 1, records[i].one_hot[1]);
+            Y.set_val(0, 2, records[i].one_hot[2]);
+
+            // Forward pass
+            Matrix A2 = forward_propagation(X);
+
+            // Cost
+            total_cost += mean_squared_error(A2, Y);
+
+            // Backprop and update
+            GradientStruct gradients = back_propagation(X, Y);
+            update_weights(gradients, learning_rate);
+        }
+
+        if(epoch % 100 == 0){
+            std::cout << "Epoch " << epoch << " cost: " << total_cost / records.size() << std::endl;
+        }
+    }
+}
+
+
+void NeuralNetwork::test(const std::vector<std::vector<Record>>& testing_data){
+    std::vector<Record> records = testing_data[1];
+    int correct = 0;
+
+    for(int i = 0; i < records.size(); i++){
+        // Build input matrix for one sample
+        Matrix X(1, inputNum, 0.0);
+        X.set_val(0, 0, records[i].sepal_length);
+        X.set_val(0, 1, records[i].sepal_width);
+        X.set_val(0, 2, records[i].pedal_length);
+        X.set_val(0, 3, records[i].pedal_width);
+
+        // Build label matrix for one sample
+        Matrix Y(1, outputNum, 0.0);
+        Y.set_val(0, 0, records[i].one_hot[0]);
+        Y.set_val(0, 1, records[i].one_hot[1]);
+        Y.set_val(0, 2, records[i].one_hot[2]);
+
+        Matrix A2 = forward_propagation(X);
+
+        // Find predicted class
+        int predicted = 0;
+        double max_val = A2.get_val(0, 0);
+        for(int j = 1; j < outputNum; j++){
+            if(A2.get_val(0, j) > max_val){
+                max_val = A2.get_val(0, j);
+                predicted = j;
+            }
+        }
+
+        // Find actual class
+        int actual = 0;
+        for(int j = 1; j < outputNum; j++){
+            if(Y.get_val(0, j) > Y.get_val(0, actual)){
+                actual = j;
+            }
+        }
+
+        if(predicted == actual) correct++;
+    }
+
+    double accuracy = (double)correct / records.size() * 100.0;
+    std::cout << "Test accuracy: " << accuracy << "%" << std::endl;
+}
 
 // Update the weights and biases of the network based on the calculated gradients and the learning rate
 void NeuralNetwork::update_weights(const GradientStruct& gradients, double learning_rate){
