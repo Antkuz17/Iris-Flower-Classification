@@ -62,11 +62,33 @@ Matrix NeuralNetwork::forward_propagation(const Matrix& input){
     return a2;
 }
 
-// // Back propagation function that will return a struct containing the gradients of the weights and biases of the network based on the input, expected output, and actual output
-// GradientStruct NeuralNetwork::back_propagation(const Matrix& input, const Matrix& expected_output){
-//     // TODO: Logic
-// }
+GradientStruct NeuralNetwork::back_propagation(const Matrix& input, const Matrix& expected_output){
+    // Forward propagation to get intermediate values
+    Matrix A2 = forward_propagation(input);
+    
+    // Output layer error
+    Matrix dZ2 = A2 - expected_output;
+    
+    // Gradients for W2 and b2
+    Matrix dW2 = a1_cache.transpose() * dZ2;
+    Matrix db2 = dZ2;
 
+    // sigmoid derivative = A1 * (1 - A1)
+    Matrix ones(a1_cache.get_num_rows(), a1_cache.get_num_col());
+    // Fill ones matrix with 1.0
+    for(unsigned int i = 0; i < ones.get_num_rows(); i++){
+        for(unsigned int j = 0; j < ones.get_num_col(); j++){
+            ones.set_val(i, j, 1.0);
+        }
+    }
+    Matrix sigmoid_deriv = a1_cache.elementwise_multiply(ones - a1_cache);
+    Matrix dZ1 = (dZ2 * W2.transpose()).elementwise_multiply(sigmoid_deriv);
+    
+    Matrix dW1 = input.transpose() * dZ1;
+    Matrix db1 = dZ1;
+    
+    return GradientStruct{dW1, db1, dW2, db2};
+}
 // // Train the neural network on a given dataset for a specified number of epochs and learning rate
 // void NeuralNetwork::train(const std::vector<std::vector<Record>>& training_data, int epochs, double learning_rate){
 //     // TODO: Logic
@@ -77,7 +99,10 @@ Matrix NeuralNetwork::forward_propagation(const Matrix& input){
 //     // TODO: Logic
 // }
 
-// // Update the weights and biases of the network based on the calculated gradients and the learning rate
-// void NeuralNetwork::update_weights(const GradientStruct& gradients, double learning_rate){
-//     // TODO: Logic
-// }
+// Update the weights and biases of the network based on the calculated gradients and the learning rate
+void NeuralNetwork::update_weights(const GradientStruct& gradients, double learning_rate){
+    W1 = W1 - gradients.dW1 * learning_rate;
+    b1 = b1 - gradients.db1 * learning_rate;
+    W2 = W2 - gradients.dW2 * learning_rate;
+    b2 = b2 - gradients.db2 * learning_rate;
+}
